@@ -15,3 +15,14 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.circle {
+  width: 450px;
+  height: 450px;
+  background: linear-gradient(to bottom, #93ecef 50%, #4b62fd 60%);
+  filter: blur(120px);
+}
+
+.shadow-card {
+  box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.03);
+}

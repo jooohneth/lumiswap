@@ -288,8 +288,9 @@ function CoinSwapper(props) {
   });
 
   return (
-    <div className="flex justify-center min-h-screen sm:px-16 px-6 bg-primary-black">
-      <div className="flex justify-between items-center flex-col max-w-[1280px] w-full">
+    <div className="flex justify-center min-h-screen sm:px-16 px-6 bg-off-white">
+      <div className="flex justify-between items-center flex-col">
+        <div className="circle rounded-full"></div>
         {/* Dialog Windows */}
         <CoinDialog
           open={dialog1Open}
@@ -312,10 +313,10 @@ function CoinSwapper(props) {
           coins={props.network.coins}
         />
 
-        <div className="flex-1 flex justify-start items-center flex-col w-full mt-2">
-          <div className="mt-10 w-full flex justify-center">
-            <div className="relative md:max-w-[700px] md:min-w-[500px] min-w-full max-w-full p-[2px] rounded-3xl">
-              <div className="w-full bg-primary-gray backdrop-blur-[4px] rounded-3xl shadow-card flex flex-col p-10">
+        <div className="absolute z-0 flex-1 flex justify-start items-center flex-col mt-2">
+          <div className="mt-10 flex justify-center">
+            <div className="md:max-w-[700px] md:min-w-[500px] min-w-full max-w-full p-[2px] rounded-3xl">
+              <div className="w-full bg-white/50 backdrop-blur-[200px] rounded-3xl shadow-card flex flex-col p-10">
                 {wrongNetworkOpen ? (
                   <WrongNetwork></WrongNetwork>
                 ) : (
@@ -358,7 +359,7 @@ function CoinSwapper(props) {
                           role="img"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 384 512"
-                          className="text-primary-green h-4"
+                          className="text-purple-3 h-4"
                         >
                           <path
                             fill="currentColor"

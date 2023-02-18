@@ -57,7 +57,7 @@ export default function CoinDialog(props) {
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={close}>
-        <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+        <div className="fixed inset-0 bg-purple-3/20" aria-hidden="true" />
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -67,7 +67,7 @@ export default function CoinDialog(props) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 bg-white bg-opacity-25" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -81,10 +81,10 @@ export default function CoinDialog(props) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-primary-gray p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <Dialog.Title
                   as="h3"
-                  className="text-lg text-center font-bold leading-6 text-primary-green"
+                  className="text-lg text-center font-bold leading-6 text-purple-3"
                 >
                   Select Token
                 </Dialog.Title>
@@ -111,7 +111,7 @@ export default function CoinDialog(props) {
                     placeholder="Search name or paste address"
                     className={`${
                       error && " border-2 border-red-700 "
-                    } " w-full flex-1 bg-primary-black outline-none font-poppins font-black text-sm text-primary-green p-3 rounded-2xl " `}
+                    } " w-full flex-1 bg-off-white outline-none font-poppins text-sm text-black p-3 rounded-xl shadow-sm " `}
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                   />
@@ -146,9 +146,9 @@ export default function CoinDialog(props) {
                   <button
                     className={`${
                       address
-                        ? "bg-primary-green text-primary-black"
-                        : "text-primary-green bg-primary-black"
-                    } "w-full border-none outline-none px-16 py-2 font-poppins font-bold text-lg rounded-2xl leading-[24px] transition-all min-h-[56px]"`}
+                        ? "bg-purple-3 text-off-white"
+                        : "text-purple-3 bg-off-white"
+                    } "w-full shadow-lg outline-none px-16 py-2 font-poppins font-bold text-lg rounded-lg leading-[24px] transition-all min-h-[56px]"`}
                     onClick={submit}
                   >
                     Enter

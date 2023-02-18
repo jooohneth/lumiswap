@@ -25,12 +25,9 @@ function Liquidity(props) {
   };
 
   return (
-    <div className="flex justify-center min-h-screen sm:px-16 px-6 bg-primary-black">
-      <div className="flex items-center flex-col max-w-[1280px] w-full mt-4">
-        <SwitchButton setDeploy={setDeploy} />
-
-        {deploy_or_remove(deploy)}
-      </div>
+    <div>
+      <SwitchButton setDeploy={setDeploy} />
+      {deploy_or_remove(deploy)}
     </div>
   );
 }

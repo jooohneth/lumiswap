@@ -49,7 +49,7 @@ export default function CoinButton(props) {
 
   return (
     <button
-      className="w-full flex justify-between items-center px-6 py-2 rounded-2xl hover:bg-secondary-gray"
+      className="w-full flex justify-between items-center px-6 py-2 rounded-lg hover:bg-off-white"
       onClick={onClick}
     >
       <div className="flex flex-row items-center">
@@ -63,10 +63,10 @@ export default function CoinButton(props) {
         )}
 
         <div className="flex flex-col">
-          <div className="text-white font-semibold text-md flex justify-start">
+          <div className="text-black font-semibold text-md flex justify-start">
             {coinAbbr}
           </div>
-          <div className="text-primary-green text-sm flex justify-start">
+          <div className="text-purple-3 text-sm flex justify-start">
             {coinName}
           </div>
         </div>
@@ -74,7 +74,7 @@ export default function CoinButton(props) {
       {showLoader ? (
         <Loader></Loader>
       ) : (
-        <div className="text-white">
+        <div className="text-black">
           {coinBalance ? formatBalance(coinBalance) : "0.0"}
         </div>
       )}

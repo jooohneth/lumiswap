@@ -32,9 +32,9 @@ const WrongNetwork = () => {
   return (
     <>
       <img
-        alt="Unparalleled Security"
+        alt="lumiswap-connect"
         src={mantleBackground}
-        className="absolute h-full w-full left-0 right-0 top-0 bottom-0 transparent z-0"
+        className="absolute h-full w-full left-0 right-0 top-0 bottom-0 transparent z-0 rounded-lg"
       />
       <Transition
         appear={true}
@@ -47,7 +47,7 @@ const WrongNetwork = () => {
         leaveTo="opacity-0 translate-y-1"
       >
         <div className="flex flex-col justify-end bg-transparent p-8 h-96 z-50">
-          <p className="font-poppins font-semibold text-primary-green text-lg text-center my-4">
+          <p className="font-poppins font-semibold text-purple-3 text-lg text-center my-4">
             {active && typeof account === "string"
               ? "Switch to Mantle Test Network!"
               : "Connect your Wallet!"}
@@ -58,7 +58,7 @@ const WrongNetwork = () => {
                 ? switchNetwork
                 : onClickConnect
             }
-            className="bg-primary-green text-white border-none outline-none px-12 py-2 font-poppins font-semibold text-md rounded-lg transition-all my-4"
+            className="bg-purple-3 text-off-white border-none outline-none px-12 py-2 font-poppins font-semibold text-md rounded-lg transition-all my-4"
           >
             {active && typeof account === "string" ? "Switch" : "Connect"}
           </button>

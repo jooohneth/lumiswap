@@ -304,153 +304,156 @@ function LiquidityRemover(props) {
   });
 
   return (
-    <div>
-      {/* Dialog Windows */}
-      <CoinDialog
-        open={dialog1Open}
-        onClose={onToken1Selected}
-        closeModal={() => setDialog1Open(false)}
-        accountAddress={props.network.account}
-        provider={props.network.provider}
-        signer={props.network.signer}
-        weth_address={props.network.weth.address}
-        coins={props.network.coins}
-      />
-      <CoinDialog
-        open={dialog2Open}
-        onClose={onToken2Selected}
-        closeModal={() => setDialog2Open(false)}
-        accountAddress={props.network.account}
-        provider={props.network.provider}
-        signer={props.network.signer}
-        weth_address={props.network.weth.address}
-        coins={props.network.coins}
-      />
+    <div className="flex justify-center min-h-screen sm:px-16 px-6 bg-off-white">
+      <div className="flex justify-between items-center flex-col max-w-[1280px] w-full">
+        <div className="circle rounded-full"></div>
+        {/* Dialog Windows */}
+        <CoinDialog
+          open={dialog1Open}
+          onClose={onToken1Selected}
+          closeModal={() => setDialog1Open(false)}
+          accountAddress={props.network.account}
+          provider={props.network.provider}
+          signer={props.network.signer}
+          weth_address={props.network.weth.address}
+          coins={props.network.coins}
+        />
+        <CoinDialog
+          open={dialog2Open}
+          onClose={onToken2Selected}
+          closeModal={() => setDialog2Open(false)}
+          accountAddress={props.network.account}
+          provider={props.network.provider}
+          signer={props.network.signer}
+          weth_address={props.network.weth.address}
+          coins={props.network.coins}
+        />
 
-      <div className="flex-1 flex justify-start items-center flex-col w-full">
-        <div className="mt-10 w-full flex justify-center">
-          <div className="relative md:max-w-[700px] md:min-w-[500px] min-w-full max-w-full p-[2px] rounded-3xl">
-            <div className="w-full min-h-[400px] bg-primary-gray backdrop-blur-[4px] rounded-3xl shadow-card flex flex-col p-10">
-              {wrongNetworkOpen ? (
-                <WrongNetwork></WrongNetwork>
-              ) : (
-                <Transition
-                  appear={true}
-                  show={showTransition}
-                  enter="transition ease-out duration-500"
-                  enterFrom="opacity-0 translate-y-2"
-                  enterTo="opacity-100 translate-y-0"
-                  leave="transition ease-in duration-500"
-                  leaveFrom="opacity-100 translate-y-0"
-                  leaveTo="opacity-0 translate-y-1"
-                >
-                  <div>
-                    <div className="mb-4">
-                      <RemoveLiquidityField1
-                        activeField={true}
-                        onClick1={() => setDialog1Open(true)}
-                        onClick2={() => setDialog2Open(true)}
-                        symbol1={
-                          coin1.symbol !== undefined ? coin1.symbol : "Select"
-                        }
-                        symbol2={
-                          coin2.symbol !== undefined ? coin2.symbol : "Select"
-                        }
-                      />
-                    </div>
-                    <div className="mb-2 w-[100%]">
-                      <RemoveLiquidityField2
-                        activeField={true}
-                        value={field1Value}
-                        onChange={handleChange.field1}
-                      />
-                    </div>
-
-                    <div className="mt-4 mb-4">
-                      <h3 className="text-center text-white font-semibold text-lg mb-2">
-                        LP-Token Balance
-                      </h3>
-                      <div className="flex justify-center items-center w-full">
-                        <p className="font-poppins font-normal text-white">
-                          {showLPTokensLoader ? (
-                            <Loader></Loader>
-                          ) : (
-                            formatReserve(liquidityTokens, "UNI-V2")
-                          )}
-                        </p>
+        <div className="absolute flex-1 flex justify-start items-center flex-col">
+          <div className="mt-10 flex justify-center">
+            <div className="relative md:max-w-[700px] md:min-w-[500px] min-w-full p-[2px] rounded-3xl">
+              <div className="w-full min-h-[400px] bg-white/50 backdrop-blur-[200px] rounded-3xl shadow-card flex flex-col p-10">
+                {wrongNetworkOpen ? (
+                  <WrongNetwork></WrongNetwork>
+                ) : (
+                  <Transition
+                    appear={true}
+                    show={showTransition}
+                    enter="transition ease-out duration-500"
+                    enterFrom="opacity-0 translate-y-2"
+                    enterTo="opacity-100 translate-y-0"
+                    leave="transition ease-in duration-500"
+                    leaveFrom="opacity-100 translate-y-0"
+                    leaveTo="opacity-0 translate-y-1"
+                  >
+                    <div>
+                      <div className="mb-4">
+                        <RemoveLiquidityField1
+                          activeField={true}
+                          onClick1={() => setDialog1Open(true)}
+                          onClick2={() => setDialog2Open(true)}
+                          symbol1={
+                            coin1.symbol !== undefined ? coin1.symbol : "Select"
+                          }
+                          symbol2={
+                            coin2.symbol !== undefined ? coin2.symbol : "Select"
+                          }
+                        />
                       </div>
-                    </div>
+                      <div className="mb-2 w-[100%]">
+                        <RemoveLiquidityField2
+                          activeField={true}
+                          value={field1Value}
+                          onChange={handleChange.field1}
+                        />
+                      </div>
 
-                    <div className="relative min-w-full max-w-full p-[2px] rounded-3xl mb-4">
-                      <div className="w-full bg-primary-black backdrop-blur-[4px] rounded-3xl shadow-card flex flex-row justify-around p-4 text-white">
-                        <div className="flex flex-col">
-                          <h6 className="font-bold text-lg text-center mb-2">
-                            Tokens In
-                          </h6>
-                          <div className="mx-auto">
-                            {showLiquidityLoader ? (
+                      <div className="mt-4 mb-6">
+                        <h3 className="text-center text-purple-3 font-semibold text-lg mb-2">
+                          LP-Token Balance
+                        </h3>
+                        <div className="flex justify-center items-center w-full">
+                          <p className="font-poppins font-normal text-black">
+                            {showLPTokensLoader ? (
                               <Loader></Loader>
                             ) : (
-                              <span className="text-sm">
-                                {formatBalance(tokensOut[0], "UNI-V2")}
-                              </span>
+                              formatReserve(liquidityTokens, "UNI-V2")
                             )}
-                          </div>
+                          </p>
                         </div>
-                        <div className="flex flex-col">
-                          <h6 className="font-bold text-lg text-center mb-2">
-                            Tokens Out
-                          </h6>
-                          <div className="mx-auto">
-                            {showLiquidityLoader ? (
-                              <Loader></Loader>
-                            ) : (
-                              <>
-                                <div className="text-sm">
-                                  {formatBalance(tokensOut[1], coin1.symbol)}
-                                </div>
-                                <div className="text-sm">
-                                  {formatBalance(tokensOut[2], coin2.symbol)}
-                                </div>
-                              </>
-                            )}
+                      </div>
+
+                      <div className="relative min-w-full max-w-full p-[2px] rounded-3xl mb-4">
+                        <div className="w-full bg-off-white backdrop-blur-[200px] rounded-3xl shadow-card flex flex-row justify-around p-4 text-black">
+                          <div className="flex flex-col">
+                            <h6 className="font-bold text-lg text-center mb-4 text-purple-3">
+                              Tokens In
+                            </h6>
+                            <div className="mx-auto">
+                              {showLiquidityLoader ? (
+                                <Loader></Loader>
+                              ) : (
+                                <span className="text-sm">
+                                  {formatBalance(tokensOut[0], "UNI-V2")}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex flex-col">
+                            <h6 className="font-bold text-lg text-center mb-4 text-purple-3">
+                              Tokens Out
+                            </h6>
+                            <div className="mx-auto">
+                              {showLiquidityLoader ? (
+                                <Loader></Loader>
+                              ) : (
+                                <>
+                                  <div className="text-sm">
+                                    {formatBalance(tokensOut[1], coin1.symbol)}
+                                  </div>
+                                  <div className="text-sm">
+                                    {formatBalance(tokensOut[2], coin2.symbol)}
+                                  </div>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <LoadingButton
-                      loading={loading}
-                      valid={isButtonEnabled()}
-                      success={false}
-                      fail={false}
-                      onClick={remove}
-                    >
-                      Remove
-                    </LoadingButton>
-                  </div>
-                </Transition>
-              )}
+                      <LoadingButton
+                        loading={loading}
+                        valid={isButtonEnabled()}
+                        success={false}
+                        fail={false}
+                        onClick={remove}
+                      >
+                        Remove
+                      </LoadingButton>
+                    </div>
+                  </Transition>
+                )}
+              </div>
             </div>
           </div>
         </div>
+        <Toaster
+          position="bottom-right"
+          reverseOrder={false}
+          gutter={8}
+          containerClassName=""
+          containerStyle={{}}
+          toastOptions={{
+            // Define default options
+            className: "border border-primary-green",
+            duration: 5000,
+            style: {
+              background: "#15171A",
+              color: "#65B3AD",
+            },
+          }}
+        />
       </div>
-      <Toaster
-        position="bottom-right"
-        reverseOrder={false}
-        gutter={8}
-        containerClassName=""
-        containerStyle={{}}
-        toastOptions={{
-          // Define default options
-          className: "border border-primary-green",
-          duration: 5000,
-          style: {
-            background: "#15171A",
-            color: "#65B3AD",
-          },
-        }}
-      />
     </div>
   );
 }

@@ -4,13 +4,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "primary-green": "#65B3AD",
-        "primary-black": "#15171A",
-        "primary-gray": "#1A1E23",
-        "secondary-gray": "rgba(255, 255, 255, 0.13)",
+        "off-white": "#f3f3ff",
+        "purple-3": "#6797F8",
       },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
+        walsheim: ["GT Walsheim", "sans-serif"],
       },
     },
   },

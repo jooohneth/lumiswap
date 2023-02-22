@@ -6,11 +6,14 @@ export default function SwitchButton(props) {
   const [deployPage, setDeployPage] = useState(true);
 
   return (
-    <div className="inline-flex rounded-md shadow-sm" role="group">
+    <div
+      className="flex justify-center items-center bg-off-white rounded-md shadow-lg w-full pt-10"
+      role="group"
+    >
       <button
         type="button"
-        className={`"bg-primary-black text-primary-green border border-primary-green rounded-l-lg px-8 py-2 text-md font-medium " ${
-          deployPage ? "bg-primary-green text-primary-black" : ""
+        className={`"bg-off-white text-purple-3 border border-purple-3 rounded-l-lg px-8 py-2 text-md font-medium " ${
+          deployPage ? "bg-purple-3 text-off-white" : ""
         }`}
         onClick={() => {
           setDeployPage(true);
@@ -21,8 +24,8 @@ export default function SwitchButton(props) {
       </button>
       <button
         type="button"
-        className={`"bg-primary-black text-primary-green border border-primary-green rounded-r-lg px-8 py-2 text-md font-medium " ${
-          !deployPage ? "bg-primary-green text-primary-black" : ""
+        className={`"bg-off-white text-purple-3 border border-purple-3 rounded-r-lg px-8 py-2 text-md font-medium " ${
+          !deployPage ? "bg-purple-3 text-off-white" : ""
         }`}
         onClick={() => {
           setDeployPage(false);

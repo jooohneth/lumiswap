@@ -23,17 +23,17 @@ export function RemoveLiquidityField1(props) {
     <div className="flex justify-around items-center flex-row w-full min-w-full h-20 sm:p-8 p-4 rounded-2xl">
       <button
         onClick={onClick1}
-        className="flex flex-row justify-around items-center bg-secondary-gray py-2 px-4 rounded-xl font-poppins font-medium text-white"
+        className="flex flex-row justify-around items-center bg-white/50 py-2 px-4 rounded-xl font-poppins font-medium text-purple-3 shadow-lg"
       >
         <span>{symbol1}</span>
-        <ChevronDownIcon className="ml-2 h-5 w-5 text-white transition duration-150 ease-in-out group-hover:text-opacity-80"></ChevronDownIcon>
+        <ChevronDownIcon className="ml-2 h-5 w-5 text-purple-3 transition duration-150 ease-in-out group-hover:text-opacity-80"></ChevronDownIcon>
       </button>
       <button
         onClick={onClick2}
-        className="flex flex-row justify-around items-center bg-secondary-gray py-2 px-4 rounded-xl font-poppins font-medium text-white"
+        className="flex flex-row justify-around items-center bg-white/50 py-2 px-4 rounded-xl font-poppins font-medium text-purple-3 shadow-lg"
       >
         <span>{symbol2}</span>
-        <ChevronDownIcon className="ml-2 h-5 w-5 text-white transition duration-150 ease-in-out group-hover:text-opacity-80"></ChevronDownIcon>
+        <ChevronDownIcon className="ml-2 h-5 w-5 text-purple-3 transition duration-150 ease-in-out group-hover:text-opacity-80"></ChevronDownIcon>
       </button>
     </div>
   );
@@ -49,14 +49,14 @@ export function RemoveLiquidityField2(props) {
 
   const { value, onChange, activeField } = props;
   return (
-    <div className="flex justify-between items-center flex-row w-full min-w-full h-20 bg-primary-black sm:p-8 p-4 rounded-2xl">
+    <div className="flex justify-between items-center flex-row w-full min-w-full h-20 bg-off-white sm:p-8 p-4 rounded-2xl">
       <input
         placeholder="0.0"
         type="number"
         value={value}
         disabled={!activeField}
         onChange={onChange}
-        className="w-full flex-1 bg-transparent outline-none font-poppins font-medium text-md text-white"
+        className="w-full flex-1 bg-transparent outline-none font-poppins font-medium text-md text-black"
       />
     </div>
   );
@@ -73,19 +73,19 @@ export default function CoinField(props) {
   const { onClick, symbol, value, onChange, activeField } = props;
 
   return (
-    <div className="flex justify-between items-center flex-row w-full min-w-full h-20 bg-primary-black sm:p-8 p-4 rounded-2xl">
+    <div className="flex justify-between items-center flex-row w-full min-w-full h-20 bg-off-white sm:p-8 p-4 rounded-2xl">
       <input
         placeholder="0.0"
         type="number"
         value={value}
         disabled={!activeField}
         onChange={onChange}
-        className="w-full flex-1 bg-transparent outline-none font-poppins font-medium text-md text-white"
+        className="w-full flex-1 bg-transparent outline-none font-poppins font-medium text-md text-black"
       />
       <div className="relative" onClick={onClick}>
-        <button className="flex flex-row justify-around items-center bg-secondary-gray py-2 px-4 rounded-xl font-poppins font-medium text-white">
+        <button className="flex flex-row justify-around items-center bg-white/50 py-2 px-4 rounded-xl font-poppins font-medium text-purple-3 shadow-lg">
           <span>{symbol}</span>
-          <ChevronDownIcon className="ml-2 h-5 w-5 text-white transition duration-150 ease-in-out group-hover:text-opacity-80"></ChevronDownIcon>
+          <ChevronDownIcon className="ml-2 h-5 w-5 text-purple-3 transition duration-150 ease-in-out group-hover:text-opacity-80"></ChevronDownIcon>
         </button>
       </div>
     </div>

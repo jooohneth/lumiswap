@@ -1,9 +1,4 @@
-# Mantle Swap
-
-This is an alternative interface to Uniswap V2 contracts deployed on an EVM blockchain modified to be used on mantle testnet. We used ReactJS for the project, with the EthersJS module to connect to the blockchain via metamask in the browser, and TailwindCSS for the frontend. Hosted with Vercel.
-
-To get a sense of how the initial version of this app was made check out the blog:
-[here](https://medium.com/clearmatics/how-i-made-a-uniswap-interface-from-scratch-b51e1027ca87)
+# Lumiswap
 
 # Getting Started with Create React App
 

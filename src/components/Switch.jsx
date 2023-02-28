@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function SwitchButton(props) {
+export default function Switch(props) {
   const { setDeploy } = props;
 
   const [deployPage, setDeployPage] = useState(true);

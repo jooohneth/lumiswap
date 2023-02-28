@@ -1,27 +1,24 @@
 import { useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
-import { getBalanceAndSymbol, getReserves } from "../ethereumFunctions";
-import { removeLiquidity, quoteRemoveLiquidity } from "./LiquidityFunctions";
 import {
-  RemoveLiquidityField1,
-  RemoveLiquidityField2,
-} from "../CoinSwapper/CoinField";
-import CoinDialog from "../CoinSwapper/CoinDialog";
-import LoadingButton from "../Components/LoadingButton";
-import WrongNetwork from "../Components/WrongNetwork";
+  getAmountOut,
+  getBalanceAndSymbol,
+  swapTokens,
+  getReserves,
+} from "../core";
+import Field from "../components/Fields";
+import Modal from "../components/Modal";
+import Balance from "../components/Balance";
+import Button from "../components/Button";
+import WrongNetwork from "../components/WrongNetwork";
 import { useWeb3React } from "@web3-react/core";
-import Loader from "../Components/Loader";
-
 import toast, { Toaster } from "react-hot-toast";
 
-function LiquidityRemover(props) {
+function Swap(props) {
   const { account, chainId } = useWeb3React();
 
   const notify = () => toast("Transaction Pending...");
-  const notifyError = () =>
-    toast("Transaction Failed...", {
-      className: "border border-red-500",
-    });
+  const notifyError = () => toast("Transaction Failed...");
 
   // Stores a record of whether their respective dialog window is open
   const [dialog1Open, setDialog1Open] = useState(false);
@@ -46,23 +43,17 @@ function LiquidityRemover(props) {
 
   // Stores the current value of their respective text box
   const [field1Value, setField1Value] = useState("");
+  const [field2Value, setField2Value] = useState("");
 
   // Controls the loading button
   const [loading, setLoading] = useState(false);
-  const [showLiquidityLoader, setShowLiquidityLoader] = useState(false);
-  const [showLPTokensLoader, setShowLPTokensLoader] = useState(false);
-
-  // Stores the liquidity tokens balance of the user
-  const [liquidityTokens, setLiquidityTokens] = useState("");
-
-  // Stores the input and output for the liquidity removal preview
-  const [tokensOut, setTokensOut] = useState([0, 0, 0]);
 
   // Switches the top and bottom coins, this is called when users hit the swap button or select the opposite
   // token in the dialog (e.g. if coin1 is TokenA and the user selects TokenB when choosing coin2)
   const switchFields = () => {
     setCoin1(coin2);
     setCoin2(coin1);
+    setField1Value(field2Value);
     setReserves(reserves.reverse());
   };
 
@@ -77,54 +68,22 @@ function LiquidityRemover(props) {
   const formatBalance = (balance, symbol) => {
     if (balance && symbol)
       return parseFloat(balance).toPrecision(8) + " " + symbol;
-    else return "";
-  };
-
-  // Turns the coin's reserves into something nice and readable
-  const formatReserve = (reserve, symbol) => {
-    if (reserve && symbol) return reserve + " " + symbol;
-    else return "";
+    else return "0.0";
   };
 
   // Determines whether the button should be enabled or not
   const isButtonEnabled = () => {
-    // If both coins have been selected, and a valid float has been entered for both, which are less than the user's balances, then return true
-    const parsedInput = parseFloat(field1Value);
+    // If both coins have been selected, and a valid float has been entered which is less than the user's balance, then return true
+    const parsedInput1 = parseFloat(field1Value);
+    const parsedInput2 = parseFloat(field2Value);
     return (
       coin1.address &&
       coin2.address &&
-      parsedInput !== NaN &&
-      0 < parsedInput &&
-      parsedInput <= liquidityTokens
+      !isNaN(parsedInput1) &&
+      !isNaN(parsedInput2) &&
+      0 < parsedInput1 &&
+      parsedInput1 <= coin1.balance
     );
-  };
-
-  const remove = () => {
-    console.log("Attempting to remove liquidity...");
-    setLoading(true);
-
-    removeLiquidity(
-      coin1.address,
-      coin2.address,
-      field1Value,
-      0,
-      0,
-      props.network.router,
-      props.network.account,
-      props.network.signer,
-      props.network.factory
-    )
-      .then(() => {
-        setLoading(false);
-
-        // If the transaction was successful, we clear to input to make sure the user doesn't accidental redo the transfer
-        setField1Value("");
-        notify();
-      })
-      .catch((e) => {
-        setLoading(false);
-        notifyError();
-      });
   };
 
   // Called when the dialog window for coin1 exits
@@ -185,6 +144,31 @@ function LiquidityRemover(props) {
     }
   };
 
+  // Calls the swapTokens Ethereum function to make the swap, then resets nessicary state variables
+  const swap = () => {
+    console.log("Attempting to swap tokens...");
+    setLoading(true);
+
+    swapTokens(
+      coin1.address,
+      coin2.address,
+      field1Value,
+      props.network.router,
+      props.network.account,
+      props.network.signer
+    )
+      .then(() => {
+        setLoading(false);
+        // If the transaction was successful, we clear to input to make sure the user doesn't accidental redo the transfer
+        setField1Value("");
+        notify();
+      })
+      .catch((e) => {
+        setLoading(false);
+        notifyError();
+      });
+  };
+
   useEffect(() => {
     setShowTransition(true);
   }, []);
@@ -202,70 +186,67 @@ function LiquidityRemover(props) {
   // This means that when the user selects a different coin to convert between, or the coins are swapped,
   // the new reserves will be calculated.
   useEffect(() => {
-    if (coin1.address && coin2.address && props.network.account) {
-      setShowLPTokensLoader(true);
+    if (coin1.address && coin2.address) {
       getReserves(
         coin1.address,
         coin2.address,
         props.network.factory,
         props.network.signer,
         props.network.account
-      ).then((data) => {
-        setReserves([data[0], data[1]]);
-        setLiquidityTokens(data[2]);
-        setShowLPTokensLoader(false);
-      });
+      ).then((data) => setReserves(data));
     }
   }, [
     coin1.address,
     coin2.address,
     props.network.account,
     props.network.factory,
+    props.network.router,
     props.network.signer,
   ]);
 
-  // This hook is called when either of the state variables `field1Value`, `coin1.address` or `coin2.address` change.
-  // It will give a preview of the liquidity removal.
+  // This hook is called when either of the state variables `field1Value` `coin1.address` or `coin2.address` change.
+  // It attempts to calculate and set the state variable `field2Value`
+  // This means that if the user types a new value into the conversion box or the conversion rate changes,
+  // the value in the output box will change.
   useEffect(() => {
-    if (isButtonEnabled()) {
-      setShowLiquidityLoader(true);
-      quoteRemoveLiquidity(
+    if (isNaN(parseFloat(field1Value))) {
+      setField2Value("");
+    } else if (parseFloat(field1Value) && coin1.address && coin2.address) {
+      getAmountOut(
         coin1.address,
         coin2.address,
         field1Value,
-        props.network.factory,
+        props.network.router,
         props.network.signer
-      ).then((data) => {
-        setTokensOut(data);
-        setShowLiquidityLoader(false);
-      });
+      )
+        .then((amount) => setField2Value(amount.toFixed(7)))
+        .catch((e) => {
+          console.log(e);
+          setField2Value("NA");
+        });
+    } else {
+      setField2Value("");
     }
   }, [
+    field1Value,
     coin1.address,
     coin2.address,
-    field1Value,
-    props.network.factory,
+    props.network.router,
     props.network.signer,
   ]);
 
+  // This hook creates a timeout that will run every ~10 seconds, it's role is to check if the user's balance has
+  // updated has changed. This allows them to see when a transaction completes by looking at the balance output.
   useEffect(() => {
-    // This hook creates a timeout that will run every ~10 seconds, it's role is to check if the user's balance has
-    // updated has changed. This allows them to see when a transaction completes by looking at the balance output.
-
     const coinTimeout = setTimeout(() => {
       if (coin1.address && coin2.address && props.network.account) {
-        setShowLPTokensLoader(true);
         getReserves(
           coin1.address,
           coin2.address,
           props.network.factory,
           props.network.signer,
           props.network.account
-        ).then((data) => {
-          setReserves([data[0], data[1]]);
-          setLiquidityTokens(data[2]);
-          setShowLPTokensLoader(false);
-        });
+        ).then((data) => setReserves(data));
       }
 
       if (coin1.address && props.network.account && !wrongNetworkOpen) {
@@ -305,10 +286,10 @@ function LiquidityRemover(props) {
 
   return (
     <div className="flex justify-center min-h-screen sm:px-16 px-6 bg-off-white">
-      <div className="flex justify-between items-center flex-col max-w-[1280px] w-full">
+      <div className="flex justify-between items-center flex-col">
         <div className="circle rounded-full"></div>
         {/* Dialog Windows */}
-        <CoinDialog
+        <Modal
           open={dialog1Open}
           onClose={onToken1Selected}
           closeModal={() => setDialog1Open(false)}
@@ -318,7 +299,7 @@ function LiquidityRemover(props) {
           weth_address={props.network.weth.address}
           coins={props.network.coins}
         />
-        <CoinDialog
+        <Modal
           open={dialog2Open}
           onClose={onToken2Selected}
           closeModal={() => setDialog2Open(false)}
@@ -329,10 +310,10 @@ function LiquidityRemover(props) {
           coins={props.network.coins}
         />
 
-        <div className="absolute flex-1 flex justify-start items-center flex-col">
+        <div className="absolute z-0 flex-1 flex justify-start items-center flex-col mt-2">
           <div className="mt-10 flex justify-center">
-            <div className="relative md:max-w-[700px] md:min-w-[500px] min-w-full p-[2px] rounded-3xl">
-              <div className="w-full min-h-[400px] bg-white/50 backdrop-blur-[200px] rounded-3xl shadow-card flex flex-col p-10">
+            <div className="md:max-w-[700px] md:min-w-[500px] min-w-full max-w-full p-[2px] rounded-3xl">
+              <div className="w-full bg-white/50 backdrop-blur-[200px] rounded-3xl shadow-card flex flex-col p-10">
                 {wrongNetworkOpen ? (
                   <WrongNetwork></WrongNetwork>
                 ) : (
@@ -347,89 +328,65 @@ function LiquidityRemover(props) {
                     leaveTo="opacity-0 translate-y-1"
                   >
                     <div>
-                      <div className="mb-4">
-                        <RemoveLiquidityField1
+                      <div>
+                        <Field
                           activeField={true}
-                          onClick1={() => setDialog1Open(true)}
-                          onClick2={() => setDialog2Open(true)}
-                          symbol1={
+                          value={field1Value}
+                          onClick={() => setDialog1Open(true)}
+                          onChange={handleChange.field1}
+                          symbol={
                             coin1.symbol !== undefined ? coin1.symbol : "Select"
                           }
-                          symbol2={
+                        />
+                        <Balance
+                          balance={coin1.balance}
+                          symbol={coin1.symbol}
+                          format={formatBalance}
+                        />
+                      </div>
+                      <button
+                        className="flex items-center justify-center p-2 mx-auto"
+                        onClick={switchFields}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          data-prefix="fas"
+                          data-icon="arrow-down"
+                          role="img"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 384 512"
+                          className="text-purple-3 h-4"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+                          ></path>
+                        </svg>
+                      </button>
+
+                      <div className="mb-6 w-[100%]">
+                        <Field
+                          activeField={false}
+                          value={field2Value}
+                          onClick={() => setDialog2Open(true)}
+                          symbol={
                             coin2.symbol !== undefined ? coin2.symbol : "Select"
                           }
                         />
-                      </div>
-                      <div className="mb-2 w-[100%]">
-                        <RemoveLiquidityField2
-                          activeField={true}
-                          value={field1Value}
-                          onChange={handleChange.field1}
+                        <Balance
+                          balance={coin2.balance}
+                          symbol={coin2.symbol}
+                          format={formatBalance}
                         />
                       </div>
-
-                      <div className="mt-4 mb-6">
-                        <h3 className="text-center text-purple-3 font-semibold text-lg mb-2">
-                          LP-Token Balance
-                        </h3>
-                        <div className="flex justify-center items-center w-full">
-                          <p className="font-poppins font-normal text-black">
-                            {showLPTokensLoader ? (
-                              <Loader></Loader>
-                            ) : (
-                              formatReserve(liquidityTokens, "UNI-V2")
-                            )}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="relative min-w-full max-w-full p-[2px] rounded-3xl mb-4">
-                        <div className="w-full bg-off-white backdrop-blur-[200px] rounded-3xl shadow-card flex flex-row justify-around p-4 text-black">
-                          <div className="flex flex-col">
-                            <h6 className="font-bold text-lg text-center mb-4 text-purple-3">
-                              Tokens In
-                            </h6>
-                            <div className="mx-auto">
-                              {showLiquidityLoader ? (
-                                <Loader></Loader>
-                              ) : (
-                                <span className="text-sm">
-                                  {formatBalance(tokensOut[0], "UNI-V2")}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex flex-col">
-                            <h6 className="font-bold text-lg text-center mb-4 text-purple-3">
-                              Tokens Out
-                            </h6>
-                            <div className="mx-auto">
-                              {showLiquidityLoader ? (
-                                <Loader></Loader>
-                              ) : (
-                                <>
-                                  <div className="text-sm">
-                                    {formatBalance(tokensOut[1], coin1.symbol)}
-                                  </div>
-                                  <div className="text-sm">
-                                    {formatBalance(tokensOut[2], coin2.symbol)}
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <LoadingButton
+                      <Button
                         loading={loading}
                         valid={isButtonEnabled()}
-                        success={false}
-                        fail={false}
-                        onClick={remove}
+                        onClick={swap}
                       >
-                        Remove
-                      </LoadingButton>
+                        Swap
+                      </Button>
                     </div>
                   </Transition>
                 )}
@@ -437,25 +394,25 @@ function LiquidityRemover(props) {
             </div>
           </div>
         </div>
-        <Toaster
-          position="bottom-right"
-          reverseOrder={false}
-          gutter={8}
-          containerClassName=""
-          containerStyle={{}}
-          toastOptions={{
-            // Define default options
-            className: "border border-primary-green",
-            duration: 5000,
-            style: {
-              background: "#15171A",
-              color: "#65B3AD",
-            },
-          }}
-        />
       </div>
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "border-2 border-purple-3",
+          duration: 5000,
+          style: {
+            background: "#f3f3ff",
+            color: "#6797F8",
+          },
+        }}
+      />
     </div>
   );
 }
 
-export default LiquidityRemover;
+export default Swap;

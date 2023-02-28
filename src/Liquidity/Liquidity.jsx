@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import SwitchButton from "./SwitchButton";
-import LiquidityDeployer from "./LiquidityDeployer";
-import LiquidityRemover from "./RemoveLiquidity";
+import Switch from "../components/Switch";
+import AddLiquidity from "./AddLiquidity";
+import RemoveLiquidity from "./RemoveLiquidity";
 
 function Liquidity(props) {
   const [deploy, setDeploy] = useState(true);
@@ -10,14 +10,14 @@ function Liquidity(props) {
   const deploy_or_remove = (deploy) => {
     if (deploy === true) {
       return (
-        <LiquidityDeployer
+        <AddLiquidity
           network={props.network}
           setupConnection={props.setupConnection}
         />
       );
     }
     return (
-      <LiquidityRemover
+      <RemoveLiquidity
         network={props.network}
         setupConnection={props.setupConnection}
       />
@@ -26,7 +26,7 @@ function Liquidity(props) {
 
   return (
     <div>
-      <SwitchButton setDeploy={setDeploy} />
+      <Switch setDeploy={setDeploy} />
       {deploy_or_remove(deploy)}
     </div>
   );

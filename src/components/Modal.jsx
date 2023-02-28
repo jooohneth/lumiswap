@@ -1,16 +1,16 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import CoinButton from "./CoinButton";
-import { doesTokenExist } from "../ethereumFunctions";
+import Token from "./Token";
+import { doesTokenExist } from "../core";
 import PropTypes from "prop-types";
 
-CoinDialog.propTypes = {
+Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   coins: PropTypes.array.isRequired,
 };
 
-export default function CoinDialog(props) {
+export default function Modal(props) {
   // The CoinDialog component will display a dialog window on top of the page, allowing a user to select a coin
   // from a list (list can be found in 'src/constants/coins.js') or enter an address into a search field. Any entered
   // addresses will first be validated to make sure they exist.
@@ -126,7 +126,7 @@ export default function CoinDialog(props) {
                 <div className="my-4">
                   {coins.map((coin, index) => (
                     <li key={index} className="list-none">
-                      <CoinButton
+                      <Token
                         coinName={coin.name}
                         coinAbbr={coin.abbr}
                         coinLogo={coin.logo}

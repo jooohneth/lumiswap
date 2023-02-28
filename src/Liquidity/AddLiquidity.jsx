@@ -2,20 +2,24 @@ import { useState, useEffect } from "react";
 import { Transition } from "@headlessui/react";
 import { useWeb3React } from "@web3-react/core";
 
-import { getBalanceAndSymbol, getReserves } from "../ethereumFunctions";
-import { addLiquidity, quoteAddLiquidity } from "./LiquidityFunctions";
+import {
+  getBalanceAndSymbol,
+  getReserves,
+  addLiquidity,
+  quoteAddLiquidity,
+} from "../core";
 
-import CoinField from "../CoinSwapper/CoinField";
-import CoinDialog from "../CoinSwapper/CoinDialog";
-import Balance from "../Components/Balance";
-import Reserve from "../Components/Reserve";
-import LoadingButton from "../Components/LoadingButton";
-import WrongNetwork from "../Components/WrongNetwork";
-import Loader from "../Components/Loader";
+import Field from "../components/Fields";
+import Modal from "../components/Modal";
+import Balance from "../components/Balance";
+import Reserve from "../components/Reserve";
+import Button from "../components/Button";
+import WrongNetwork from "../components/WrongNetwork";
+import Loader from "../components/Loader";
 
 import toast, { Toaster } from "react-hot-toast";
 
-function LiquidityDeployer(props) {
+function AddLiquidity(props) {
   const { account, chainId } = useWeb3React();
 
   const notify = () => toast("Transaction Pending...");
@@ -326,7 +330,7 @@ function LiquidityDeployer(props) {
       <div className="flex justify-between items-center flex-col max-w-[1280px] w-full">
         <div className="circle rounded-full"></div>
         {/* Dialog Windows */}
-        <CoinDialog
+        <Modal
           open={dialog1Open}
           onClose={onToken1Selected}
           closeModal={() => setDialog1Open(false)}
@@ -336,7 +340,7 @@ function LiquidityDeployer(props) {
           weth_address={props.network.weth.address}
           coins={props.network.coins}
         />
-        <CoinDialog
+        <Modal
           open={dialog2Open}
           onClose={onToken2Selected}
           closeModal={() => setDialog2Open(false)}
@@ -365,7 +369,7 @@ function LiquidityDeployer(props) {
                   >
                     <div>
                       <div className="mb-4">
-                        <CoinField
+                        <Field
                           activeField={true}
                           value={field1Value}
                           onClick={() => setDialog1Open(true)}
@@ -382,7 +386,7 @@ function LiquidityDeployer(props) {
                       </div>
 
                       <div className="mb-2 w-[100%]">
-                        <CoinField
+                        <Field
                           activeField={true}
                           value={field2Value}
                           onClick={() => setDialog2Open(true)}
@@ -468,7 +472,7 @@ function LiquidityDeployer(props) {
                         </div>
                       </div>
 
-                      <LoadingButton
+                      <Button
                         loading={loading}
                         valid={isButtonEnabled()}
                         success={false}
@@ -476,7 +480,7 @@ function LiquidityDeployer(props) {
                         onClick={deploy}
                       >
                         Deploy
-                      </LoadingButton>
+                      </Button>
                     </div>
                   </Transition>
                 )}
@@ -505,4 +509,4 @@ function LiquidityDeployer(props) {
   );
 }
 
-export default LiquidityDeployer;
+export default AddLiquidity;

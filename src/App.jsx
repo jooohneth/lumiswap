@@ -1,7 +1,7 @@
 import React from "react";
-import Web3ProviderCore from "./network";
+import { Connector } from "./connect";
 import NarBar from "./NavBar/NavBar";
-import CoinSwapper from "./CoinSwapper/CoinSwapper";
+import Swap from "./Swap/Swap";
 import { Route } from "react-router-dom";
 import Liquidity from "./Liquidity/Liquidity";
 import { Web3ReactProvider } from "@web3-react/core";
@@ -15,23 +15,20 @@ const getLibrary = (provider) => {
 const App = () => {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <Web3ProviderCore
+      <Connector
         render={(network, setupConnection) => (
           <div>
             <NarBar />
 
             <Route exact path="/">
-              <CoinSwapper
-                network={network}
-                setupConnection={setupConnection}
-              />
+              <Swap network={network} setupConnection={setupConnection} />
             </Route>
             <Route exact path="/liquidity">
               <Liquidity network={network} setupConnection={setupConnection} />
             </Route>
           </div>
         )}
-      ></Web3ProviderCore>
+      ></Connector>
     </Web3ReactProvider>
   );
 };

@@ -1,10 +1,10 @@
 import { useEffect, useState, Fragment } from "react";
 import { Transition } from "@headlessui/react";
 import { mantleBackground } from "../assets";
-import { switchNetwork } from "../network";
+import { switchNetwork } from "../connect";
 import { useWeb3React } from "@web3-react/core";
 import { UserRejectedRequestError } from "@web3-react/injected-connector";
-import { injected } from "../network";
+import { injected } from "../connect";
 
 const WrongNetwork = () => {
   const { active, account, activate, setError } = useWeb3React();

@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { UserRejectedRequestError } from "@web3-react/injected-connector";
-import { injected, formatAddress } from "../network";
+import { injected, formatAddress } from "../connect";
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 

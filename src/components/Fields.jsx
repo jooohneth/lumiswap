@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
-CoinField.propTypes = {
+Field.propTypes = {
   onClick: PropTypes.func.isRequired,
   symbol: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
@@ -9,7 +9,7 @@ CoinField.propTypes = {
   activeField: PropTypes.bool.isRequired,
 };
 
-export function RemoveLiquidityField1(props) {
+export function RemoveLiquiditySelect(props) {
   // This component is used to selecting a coin and entering a value, the props are explained below:
   //      onClick - (string) => void - Called when the button is clicked
   //      symbol - string - The text displayed on the button
@@ -39,7 +39,7 @@ export function RemoveLiquidityField1(props) {
   );
 }
 
-export function RemoveLiquidityField2(props) {
+export function RemoveLiquidityInput(props) {
   // This component is used to selecting a coin and entering a value, the props are explained below:
   //      onClick - (string) => void - Called when the button is clicked
   //      symbol - string - The text displayed on the button
@@ -62,7 +62,7 @@ export function RemoveLiquidityField2(props) {
   );
 }
 
-export default function CoinField(props) {
+export default function Field(props) {
   // This component is used to selecting a token and entering a value, the props are explained below:
   //      onClick - (string) => void - Called when the button is clicked
   //      symbol - string - The text displayed on the button

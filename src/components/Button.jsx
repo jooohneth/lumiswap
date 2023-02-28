@@ -1,6 +1,6 @@
 import Loader from "./Loader";
 
-export default function LoadingButton(props) {
+export default function Button(props) {
   const { children, loading, valid, onClick } = props;
   return (
     <div className="mt-10 relative flex items-center justify-center">

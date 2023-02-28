@@ -6,58 +6,14 @@ import {
   getRouter,
   getNetwork,
   getWeth,
-} from "./ethereumFunctions";
-import COINS from "./constants/coins";
-import * as chains from "./constants/chains";
+} from "../core";
+import COINS from "../constants/coins";
+import * as chains from "../constants/chains";
 import { InjectedConnector } from "@web3-react/injected-connector";
 
 const { ethereum } = window;
 
-export const switchNetwork = async () => {
-  try {
-    await ethereum.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x1389" }],
-    });
-  } catch (switchError) {
-    // This error code indicates that the chain has not been added to MetaMask.
-    if (switchError.code === 4902) {
-      try {
-        await ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: "0x1389",
-              chainName: "Mantle Testnet",
-              nativeCurrency: {
-                name: "BIT Token",
-                symbol: "BIT",
-                decimals: 18,
-              },
-              rpcUrls: ["https://rpc.testnet.mantle.xyz"],
-              blockExplorerUrls: ["https://explorer.testnet.mantle.xyz"],
-            },
-          ],
-        });
-      } catch (addError) {
-        console.error(addError);
-      }
-    }
-    console.log(switchError);
-  }
-};
-
-export const formatAddress = (value, length = 4) => {
-  return `${value.substring(0, length + 2)}...${value.substring(
-    value.length - length
-  )}`;
-};
-
-export const injected = new InjectedConnector({
-  supportedChainIds: [5001, 1, 5],
-});
-
-const Web3ProviderCore = (props) => {
+export const Connector = (props) => {
   let network = Object.create({});
   network.provider = useRef(null);
   network.signer = useRef(null);
@@ -107,4 +63,46 @@ const Web3ProviderCore = (props) => {
   return <>{props.render(network, setupConnection)}</>;
 };
 
-export default Web3ProviderCore;
+export const switchNetwork = async () => {
+  try {
+    await ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: "0x1389" }],
+    });
+  } catch (switchError) {
+    // This error code indicates that the chain has not been added to MetaMask.
+    if (switchError.code === 4902) {
+      try {
+        await ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: "0x1389",
+              chainName: "Mantle Testnet",
+              nativeCurrency: {
+                name: "BIT Token",
+                symbol: "BIT",
+                decimals: 18,
+              },
+              rpcUrls: ["https://rpc.testnet.mantle.xyz"],
+              blockExplorerUrls: ["https://explorer.testnet.mantle.xyz"],
+            },
+          ],
+        });
+      } catch (addError) {
+        console.error(addError);
+      }
+    }
+    console.log(switchError);
+  }
+};
+
+export const formatAddress = (value, length = 4) => {
+  return `${value.substring(0, length + 2)}...${value.substring(
+    value.length - length
+  )}`;
+};
+
+export const injected = new InjectedConnector({
+  supportedChainIds: [5001, 1, 5],
+});

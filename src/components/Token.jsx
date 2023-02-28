@@ -1,15 +1,15 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { getBalanceAndSymbol } from "../ethereumFunctions";
-import Loader from "../Components/Loader";
+import { getBalanceAndSymbol } from "../core";
+import Loader from "./Loader";
 
-CoinButton.propTypes = {
+Token.propTypes = {
   coinName: PropTypes.string.isRequired,
   coinAbbr: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
-export default function CoinButton(props) {
+export default function Token(props) {
   const {
     coinName,
     coinAbbr,

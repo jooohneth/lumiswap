@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import Connect from "../Components/Connect";
+import Connect from "../components/Connect";
 
 const Navbar = () => {
   return (
